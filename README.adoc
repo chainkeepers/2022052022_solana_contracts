@@ -6,6 +6,8 @@ Working with https://hardhat.org/getting-started/[Hardhat].
 
 [source,sh]
 ----
-npm install --save-dev hardhat
+cd solidity
 
+# npm install --save-dev hardhat
+npm install
 ----
