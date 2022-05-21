@@ -1,0 +1,284 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Introduction to Solana smart contracts</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black-changed.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+
+	<!-- NOTES-->
+	<!-- to show border: class="r-frame" or ... -->
+	<!-- style="border-style: solid; border-color: white; border-width: 1px !important;"-->
+	<!-- black theme background color: #191919-->
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- INTRODUCTION-->
+				<section data-background="images/background.png">
+					<h1>
+					Solana smart contracts
+					</h1>
+					<img src="images/solana-logo.png" style="width: 4em;" />
+				</section>
+
+				<section data-background="images/background.png">
+					<div style="display:flex;">
+						<div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+							<img src="images/helmet.jpg" alt="avatar" style="border-radius: 50%; margin: 0px;">
+						</div>
+						<div style="flex: 7; text-align: left; margin-left: 3%;">
+							<ul style="margin-top: 5%; list-style: none;">
+								<li>Ondřej Chaloupka (<a href="https://twitter.com/_chalda">@_chalda</a>)</li>
+								<li>
+									working at ChainKeepers
+									<a href="http://chainkeepers.io">
+										<img src="images/chkp.jpg" style="height: 1em; border-radius: 50%; margin: 0px;">
+									</a>
+								</li>
+								<li>formerly Java developer</li>
+								<li>interest in distributed systems</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section data-background="images/background.png">
+					<h2>Workshop</h2>
+					<p>&nbsp;</p>
+					<p><a href="https://github.com/chainkeepers/20220605_solana_contracts">https://bit.ly/chkp-solana</a></p>
+					<p><a href="https://github.com/chainkeepers/20220605_solana_contracts">github @ chainkeepers/20220605_solana_contracts</a></p>
+				</section>
+				
+				<section data-background="images/solana-meme.png" data-background-size="70%"></section>
+				<section data-background="images/solana-meme-restart.jpg" data-background-size="70%"></section>
+
+
+				<!-- ETHEREUM-->
+				<section data-background="images/background.png">
+					<h2>Agenda</h2>
+				<section data-background="images/background.png"><h2>...</h2></section>
+				<ol>
+						<li>Ethereum recap</li>
+						<li>Ethereum smart contract</li>
+						<li>Solana blockchain overview</li>
+						<li>Solana smart contract</li>
+					</ol>
+				</section>
+
+				<section data-background="images/background-ethereum.png">
+					<h2>Ethereum recap</h2>
+					<ul>
+						<li>transactions placed in mempool</li>
+						<li>processing based on fees</li>
+						<li>serial smart contract processing</li>
+					</ul>
+				</section>
+				<section data-background="images/ethereum-txn.png" data-background-size="85%"></section>
+		
+				<section data-background="images/background-ethereum.png">
+					<img src="images/coding-time.jpg" />
+				</section>
+
+				<section data-background="images/background-ethereum.png">
+					<h2>Ethereum smart contracts</h2>
+					<ul>
+						<li>data owned by contract<br/><span style="color: #999;">(key-value store, LevelDB in Geth)</span></li>
+						<li>difficult to upgrade when deployed</li>
+						<li>usualy Solidity programming language</li>
+						<li>straightforward to work with</li>
+					</ul>
+					<!--https://laurentsenta.com/articles/storage-and-dapps-on-ethereum-blockchain/-->
+				</section>
+
+				<section data-background="images/eth-meme-fees.png" data-background-size="80%"></section>
+
+				<!-- SOLANA-->
+				<section data-background="images/background-solana.png" >
+					<img src="images/8-core-innovations-solana.png" />
+					<div style="font-size: 0.3em; text-align: right;">
+						<a href="https://medium.com/solana-labs/7-innovations-that-make-solana-the-first-web-scale-blockchain-ddc50b1defda">
+							8 Innovations that Make Solana the First Web-Scale Blockchain; Anatoly Yakovenko (2019)
+						</a>
+					</dif>
+				</section>
+				
+				<section data-background="images/background-solana.png" >
+					<h2>8 core inovations</h2>
+					<ul>
+						<li>Proof of History (PoH)<a href="https://medium.com/solana-labs/proof-of-history-a-clock-for-blockchain-cf47a61a9274" style="font-size: 80%"> — clock before consensus</a></li>
+						<li>Tower BFT<a href="https://medium.com/solana-labs/tower-bft-solanas-high-performance-implementation-of-pbft-464725911e79" style="font-size: 80%"> — a PoH-optimized version of PBFT</a></li>
+						<li>Turbine<a href="https://medium.com/solana-labs/turbine-solanas-block-propagation-protocol-solves-the-scalability-trilemma-2ddba46a51db" style="font-size: 80%"> — a block propagation protocol</a></li>
+						<li>Gulf Stream<a href="https://medium.com/solana-labs/gulf-stream-solanas-mempool-less-transaction-forwarding-protocol-d342e72186ad" style="font-size: 80%"> — Mempool-less transaction forwarding protocol</a></li>
+						<li>Sealevel<a href="https://medium.com/solana-labs/sealevel-parallel-processing-thousands-of-smart-contracts-d814b378192" style="font-size: 80%"> — Parallel smart contracts run-time</a></li>
+						<li>Pipelining<a href="https://medium.com/solana-labs/7-innovations-that-make-solana-the-first-web-scale-blockchain-ddc50b1defda" style="font-size: 80%"> — a Txn Processing Unit for validation optimization</a></li>
+						<li>Cloudbreak<a href="https://medium.com/solana-labs/cloudbreak-solanas-horizontally-scaled-state-architecture-9a86679dcbb1" style="font-size: 80%"> — Horizontally-Scaled Accounts Database</a></li>
+						<li style="filter: brightness(0.65);">Archivers<a href="" style="font-size: 80%"> — Distributed ledger storage</a></li>
+					</ul>
+				</section>
+
+
+				<section data-background="images/solana-txn.png" data-background-size="80%"></section>
+				<section data-background="images/solana-8-inovations.png" data-background-size="80%"></section>
+
+				<!-- SOLANA CONTRACT -->
+				<section data-background="images/background-solana.png" >
+					<h2>Programming model</h2>
+					<ul>
+						<li>Accounts</li>
+						<li>Transactions</li>
+						<li>Runtime</li>
+						<li style="filter: brightness(0.65);">Calling Between Programs</li>
+					</ul>
+					<div style="font-size: 0.3em; text-align: right; margin-top: 5em;">
+						<a href="https://docs.solana.com/developing/programming-model/overview">
+							Solana Documentation: Programming Model
+						</a>
+					</div>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<h2>Accounts</h2>
+					<ul>
+						<li>everything is an account, everything is
+							<a href="https://github.com/solana-labs/solana-program-library">a program</a></li>
+						<li>address, balance, owner, data</li>
+						<li>rent paid for data storage</li>
+						<!--  two types on-curve - ed25519 curve - a valid public key; off-curve “program derived address” (PDA) no corresponding private key -->
+					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<pre class="bash" style="width: 100%;"><code data-trim data-escape>
+						$ solana-keygen new -o /tmp/keypair.json
+						>> HDjNVY5sVjfs8vUwBBXXhMu7j72EaEFcjiJW3ozBKZds
+						$ solana transfer $(solana-keygen pubkey /tmp/keypair.json) 10
+					</code></pre>
+					<img src="images/arrow-down.png" style="margin:0px"/>
+					<div>
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-account-explorer.png" />
+						</a>
+					</div>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<h2>Transactions</h2>
+					<ul>
+						<li>formed by instructions</li>
+						<li>price in number of signatures (<a href="https://decrypt.co/87532/ethereum-gas-fees-avalanche-solana">0.000005</a>)</li>
+						<!-- transaction fees is a proposal to come to Solana -->
+						<li>transaction size to fit MTU (1232 bytes)</li> <!-- maximum transmission unit -->
+						<!-- each transaction must list all accounts that it needs to properly lock accounts for parallel execution.-->
+						<li>contains blockhash (valid for 150 blocks)</li>
+					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<pre style="width: 110%;"><code data-trim data-escape>
+						$ solana transfer $(solana-keygen pubkey /tmp/keypair.json) 10
+						>> Signature: Ha3dQSWryhD2tXyf9VKPWNzxv3fXCB66NtjGx2hd5KegSrcx...
+					</code></pre>
+					<img src="images/arrow-down.png" style="margin:0px"/>
+					<div>
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-transaction-explorer.png" />
+						</a>
+					</div>
+				</section>
+
+				<section data-background="images/background-solana.png">
+					<h2>Recent blockhash at send</h2>
+					<pre class="python" style="width: 100%;"><code data-trim data-escape>
+					# // https://github.com/michaelhly/solana-py @ api.py
+					blockhash_resp = self.get_recent_blockhash(Finalized)
+					recent_blockhash = self.parse_recent_blockhash(blockhash_resp)
+					txn.recent_blockhash = recent_blockhash
+			
+					txn.sign(*signers)
+					txn_resp = self.send_raw_transaction(txn.serialize(), opts=opts)
+					</code></pre>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<div style="margin:0px">
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-transaction-explorer2.png" />
+						</a>
+					</div>
+					<img src="images/arrow-down.png" style="margin:0px"/>
+					<div style="margin:0px">
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-transaction-explorer3.png" />
+						</a>
+					</div>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<h2>Runtime</h2>
+					<ul>
+						<li>accounts announced beforehand</li>
+						<li>computational time limited</li> <!-- 200.000 compute units per instruction -->
+					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<img src="images/github-mango-explorer.png" width="85%"/>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<h2>Solana smart contract</h2>
+					<ul>
+						<li>Rust programming language</li>
+						<li>Anchor framework</li>
+					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png">
+					<img src="images/coding-time.jpg" />
+				</section>
+
+
+				<section data-background="images/background-solana.png">
+					<h2>Solana recap</h2>
+					<ul>
+						<li>Rust + Anchor</li>
+						<li>account - balance, owner, data</li>
+						<li>blockhash to send transaction</li>
+					</ul>
+				</section>
+
+				<section data-background="images/solana-end2.jpg">
+					<h2 style="text-align: right; margin-top: 8em;">
+						Q & A
+					</h2>
+				</section>
+
+				<!--https://medium.com/dragonfly-research/the-amm-test-a-no-bs-look-at-l1-performance-4c8c2129d581-->
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

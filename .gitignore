@@ -1,1 +1,11 @@
+# npm
 node_modules/
+artifacts/
+cache/
+
+# python
+.venv
+__pycache__
+
+# solana
+test-ledger/
