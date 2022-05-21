@@ -1,0 +1,11 @@
+= Solana smart contract basics
+
+== Simple solidity smart contract
+
+Working with https://hardhat.org/getting-started/[Hardhat].
+
+[source,sh]
+----
+npm install --save-dev hardhat
+
+----
