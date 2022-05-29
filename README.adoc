@@ -1,48 +1,342 @@
 = Solana smart contract basics
 
-== Simple solidity smart contract
+== Solidity smart contract
 
-Working with https://hardhat.org/getting-started/[Hardhat].
+Working with Eth Brownie -
+_A Python-based development and testing framework for smart contracts targeting the Ethereum Virtual Machine_.
+https://github.com/eth-brownie/brownie/tree/v1.19.0
+
+To setup based on the https://github.com/eth-brownie/brownie/tree/v1.19.0#for-development
+
+NOTE: expecting the `nodejs`, `npm` and `python` to be installed
 
 [source,sh]
 ----
+git clone --depth 1 https://github.com/eth-brownie/brownie.git -b v1.19.0 solidity
 cd solidity
+rm -rf .git*
+python3 -m venv .venv
+./.venv/bin/activate
+pip install wheel
+pip install -e . -r requirements-dev.txt
 
-# get dependencies
-# npm install --save-dev hardhat
+# in case of troubles in dependencies
+# and install requirements once again
+sed -i 's/certifi==2021.10.8/certifi==2022.5.18.1/' ./requirements-dev.txt
+
+
+# ----
+# brownie depends on Ganache-CLI for local development
+npm install -g ganache-cli
+
+which ganache-cli
+> ~/.nvm/versions/node/v16.13.0/bin/ganache-cli
+ganache-cli version
+> Ganache CLI v6.12.2 (ganache-core: 2.13.2)
+
+# install brownie
+python3 -m venv .venv
+source .venv/bin/activate
+
+pip install eth-brownie
+brownie --version
+> Brownie v1.19.0 - Python development framework for Ethereum
+
+# then to init the smart contract project
+# we can create an empty directory structure with `brownie init` command
+# or use prepaed template `brownie bake token`
+# but we use a simple brownie project and start work from there
+
+# to work with logs use third-party project
+git clone https://github.com/PatrickAlphaC/brownie-events-logs --depth 1 counter
+cd counter
+rm -rf .git*
+# to test if the brownie works
+brownie run scripts/deploy_and_store.py
+
+# change the contract as it should be
+brownie compile
+# to run the tests
+brownie test
+
+# to run the script that calls the contract
+brownie run scripts/deploy_and_store.py
+
+# to use brownie console to operate with contract
+# more at https://betterprogramming.pub/getting-started-with-brownie-part-3-ef6bfa9867d7
+brownie console
+>>> accounts
+>>> Counter.deploy(1, {'from':accounts[0]})
+>>> counter = Counter[0]
+>>> tx = counter.addCounter()
+>>> tx.events
+
+# when brownie console is running we can use curl to talk directly with the HTTP API
+>>> web3.sha3(text='retrieve()')[0:10]
+# output: HexBytes('0x2e64cec1a5de1977f20d')
+>>> Counter[0]
+# output: <Counter Contract '0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87'>
+
+# curl call
+curl -X POST -H "Content-Type: application/json" \
+  --data "{\"jsonrpc\":\"2.0\",\"id\": 1,\"method\":\"eth_call\",\"params\":[{\"to\":\"0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87\",\"data\":\"0x2e64cec1a5de1977f20d\"},\"latest\"]}"\
+  localhost:8545
+----
+
+== Solana smart contract
+
+Nice resource to understand the Solana account mode is blogpost 
+https://paulx.dev/blog/2021/01/14/programming-on-solana-an-introduction/
+
+The account model is base to understand to code the contracts.
+
+This workshop will work with framework link:https://book.anchor-lang.com/[Anchor]. It's a highlevel Rust library.
+
+Solana online tool similar to Ethereum Remix can be found at
+https://beta.solpg.io
+
+=== 1) Installing Rust, Solana and Anchor
+
+We need local instalment of Rust, Solana validator CLI and Anchor framework.
+
+* for Rust installation, see https://www.rust-lang.org/tools/install
+* for Solana CLI tools installation, see https://docs.solana.com/cli/install-solana-cli-tools
+* for Anchor installation, see https://book.anchor-lang.com/getting_started/installation.html#anchor
+
+[source,sh]
+----
+# Rust installation
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustup component add rustfmt
+
+# Solana CLI tools
+sh -c "$(curl -sSfL https://release.solana.com/v1.10.20/install)"
+# -- or ---
+solana-install update
+
+# Anchor framework
+cargo install --git https://github.com/project-serum/anchor avm --locked --force
+avm install latest; avm use latest
+----
+
+=== 2) Initialization of Anchor project
+
+To create a Anchor project use `init`.
+
+NOTE: to get to the final state of this part go to branch `solana_01`.
+
+[source,sh]
+----
+anchor init anchor
+cd anchor
+# rm -rf .git
+
+# to fetch all Rust dependencies and build the program
+anchor build
+----
+
+=== 3) Start Solana validator at localhost
+
+First we need a keypair to work with while developing.
+Solana account is defined as usual with private and public key.
+The keypair expresses the both, private and public key.
+
+The keypair file is an array of 64 values where
+32 bytes represents the private and 32 bytes the public key.
+The public key is displayed in form of base58 string normally.
+
+[source,sh]
+----
+solana-keygen new
+# generated keypair is placed at $HOME/.config/solana/id.json
+----
+
+NOTE: to place keypair at specific location `solana-keygen new --outfile <path>/second-key.json`
+
+To check what is the public key of the keypair
+
+[source,sh]
+----
+solana-keygen pubkey
+# is the same as explicitly say the path to keypair file
+solana-keygen pubkey ~/.config/solana/id.json
+----
+
+Then starting the validator, see https://docs.solana.com/developing/test-validator
+
+[source,sh]
+----
+solana-test-validator
+# data structure of the test validator
+# is saved in current directory under ./test-ledger
+----
+
+Now, let's configure the Solana CLI to use the local validator as the default location
+
+[source,sh]
+----
+solana config set --url http://127.0.0.1:8899
+
+# now we can ask for airdrop to our dev pubkey address that CLI works with by default
+solana airdrop 10
+solana balance
+
+# airdrop showed a transaction signature, we can check what was part of it
+solana confirm -v <transaction signature>
+
+# to transfer we create a new keypair and send SOLs there
+solana-keygen new -o ~/.config/solana/second-keypair.json
+# send airdropped SOLs to new address
+solana transfer $(solana-keygen pubkey ~/.config/solana/second-keypair.json)  10 --allow-unfunded-recipient --fee-payer ~/.config/solana/id.json
+solana balance $(solana-keygen pubkey ~/.config/solana/second-keypair.json)
+
+solana transfer $(solana-keygen pubkey ~/.config/solana/id.json)  3 --keypair ~/.config/solana/second-keypair.json --fee-payer ~/.config/solana/id.json
+
+solana account -v $(solana-keygen pubkey ~/.config/solana/second-keypair.json)
+----
+
+=== 4) Deploy contract and call it
+
+To deploy built contract we use the Anchor deploy command.
+The configuration for the Anchor commands can be found at `Anchor.toml`.
+
+NOTE: for list of the Anchor CLI commands see https://project-serum.github.io/anchor/cli/commands.html
+
+[source,sh]
+----
+anchor deploy
+----
+
+With that we can found the program id that the program was deployed at.
+We need to change the program id in `Anchor.toml` and in `programs/anchor/src/libs.rs`
+to match with the deployed address.
+
+At Anchor build the binary is placed under `target/deploy/anchor.so`.
+Beside that there is keypair that defines the program id (address of the program).
+
+[source,sh]
+----
+solana-keygen pubkey target/deploy/anchor-keypair.json
+----
+
+As we have now running the validator we can invoke the contract method.
+This needs to be done via API.
+At start we will use the generated JavaScript and in the next
+step we will start using Python for that.
+
+The API call is part of the test at
+`tests/anchor.ts`.
+
+NOTE: Be could run simply `anchor test` that will start the test validator automatically
+      in background (leger at `.anchor/test-ledger/`,  logs at `.anchor/program-logs`).
+
+[source,sh]
+----
+# in separate shell we can list logs of contracts execution
+solana logs --url localhost
+
+# to run the test we ask to use the already running validator
+anchor test --skip-deploy --skip-local-validator --skip-build
+----
+
+=== 5) Using Python to run API calls
+
+As we are rather a Python shop than JavaScript lovers we do use `anchorpy` from now.
+Let's delete the JavaScript dependencies in the Anchor project.
+
+NOTE: to get to the final state of this part go to branch `solana_02`.
+
+[source,sh]
+----
+rm -rf tests/anchor.ts yarn.lock package.json tsconfig.json node_modules/
+
+python -m venv .venv
+source .venv/bin/activate
+
+pip install -r requirements.txt
+----
+
+=== 6) Writing Solana counter contract
+
+Now it's time to write the counter Solana contract
+and Python client.
+
+Let's start with the prepared contract and work
+to get running the client.
+
+[source,sh]
+----
+git checkout solana_counter
+----
+
+Now, **change the code** appropriatelly.
+
+Deploying new version of contract
+
+[source,sh]
+----
+anchor build
+anchor deploy
+----
+
+NOTE: tests could be run the same way as previously
+      `anchor test --skip-local-validator --skip-build --skip-deploy`
+
+Then we can work with python client program.
+
+[source,sh]
+----
+# intializing the account where the program is owner and may change the account data
+python tests/client.py -t init -c ~/.config/solana/second-keypair.json
+# printing content of the data account
+python tests/client.py -t show -c ~/.config/solana/second-keypair.json
+# changing the counter
+python tests/client.py -t add -c ~/.config/solana/second-keypair.json
+# closing the account
+python tests/client.py -t close -c ~/.config/solana/second-keypair.json
+----
+
+Account and transactions can be checked via Solana Explorer application at
+https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899
+
+or via console commands
+
+[source,sh]
+----
+# acccount
+solana account -v <account pubkey>
+# transaction
+solana confirm -v <transaction signature>
+----
+
+=== 6) Bonus: Program Derived Addresses
+
+The calls are mostly the same but we need to calculate
+the off-curve PDA public key at client and send
+the account public key to contract that creates the PDA account.
+
+=== 7) Workshop finished
+
+Continue at https://soldev.app/
+
+
+== Reveal.js slides dev
+
+reveal.js is an open source HTML presentation framework
+https://github.com/hakimel/reveal.js/tree/4.3.1
+
+Installation and usage base on
+https://revealjs.com/installation/
+
+[source,sh]
+----
+git clone --depth 1 https://github.com/hakimel/reveal.js -b 4.3.1 reveal.js
+cd reveal.js
+rm -rf .git*
+
 npm install
-
-# running the local hardhat node
-npx hardhat node
-
-# compile solidity contracts
-npx hardhat compile
-
-# running the hardhat script that can deploy the contract
-npx hardhat run --network localhost
+npm start
 ----
 
-Now the Ethereum local test nework runs we want to call to the RPC node (Geth)
-with a HTTP RPC call.
-
-To call the RPC call to invoke the ethereum method we need to hash
-the Solidity method name and takes the first 10 characters and place it to 'data' of the json content.
-
-[source,javascript]
-----
-// before this run `node` command at the command line
-// to launch the nodejs cli
-require('web3-utils')
-u.soliditySha3('greet()').substring(0,10)
-
-// or with the web3 library
-web3.sha3("doMultiply(unit256,unit256)").substring(0,10)
-----
-
-Then it's possible to call against the started hardhat
-
-[srouce,sh]
-----
-curl -X POST -H "Content-Type: application/json" --data "{\"jsonrpc\":\"2.0\",\"id\": 1,\"method\":\"eth_call\",\"params\":[{\"to\":\"0x5fbdb2315678afecb367f032d93f642f64180aa3\",\"data\":\"0xcfae3217\"},\"latest\"]}"  localhost:8545
-0x5fbdb2315678afecb367f032d93f642f64180aa3
-----
+NOTE: images created with https://excalidraw.com/

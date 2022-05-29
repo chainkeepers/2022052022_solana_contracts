@@ -1,0 +1,18 @@
+[features]
+seeds = false
+
+[programs.localnet]
+anchor = "52nm5mLXp6rEu5Qr27Y3u2ycveB43eGkRxABiiMQcrbE"
+
+[programs.devnet]
+market_contract = "E8rzJBbUCbice9Q4BcX3LzzixtkJD11GTnDcqPS7WqaA"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "/home/chalda/.config/solana/id.json"
+
+[scripts]
+test = "python -m pytest"
