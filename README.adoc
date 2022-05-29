@@ -8,6 +8,41 @@ Working with https://hardhat.org/getting-started/[Hardhat].
 ----
 cd solidity
 
+# get dependencies
 # npm install --save-dev hardhat
 npm install
+
+# running the local hardhat node
+npx hardhat node
+
+# compile solidity contracts
+npx hardhat compile
+
+# running the hardhat script that can deploy the contract
+npx hardhat run --network localhost
+----
+
+Now the Ethereum local test nework runs we want to call to the RPC node (Geth)
+with a HTTP RPC call.
+
+To call the RPC call to invoke the ethereum method we need to hash
+the Solidity method name and takes the first 10 characters and place it to 'data' of the json content.
+
+[source,javascript]
+----
+// before this run `node` command at the command line
+// to launch the nodejs cli
+require('web3-utils')
+u.soliditySha3('greet()').substring(0,10)
+
+// or with the web3 library
+web3.sha3("doMultiply(unit256,unit256)").substring(0,10)
+----
+
+Then it's possible to call against the started hardhat
+
+[srouce,sh]
+----
+curl -X POST -H "Content-Type: application/json" --data "{\"jsonrpc\":\"2.0\",\"id\": 1,\"method\":\"eth_call\",\"params\":[{\"to\":\"0x5fbdb2315678afecb367f032d93f642f64180aa3\",\"data\":\"0xcfae3217\"},\"latest\"]}"  localhost:8545
+0x5fbdb2315678afecb367f032d93f642f64180aa3
 ----
