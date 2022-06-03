@@ -1,4 +1,3 @@
-# tests/basic-0.py
 import asyncio
 from pytest import fixture, mark
 from solana.keypair import Keypair
@@ -10,7 +9,7 @@ from solana.system_program import SYS_PROGRAM_ID
 
 from pda_acccount import get_pda_address, SEED
 
-# see more at
+# anchorpy testing documented at
 # https://kevinheavey.github.io/anchorpy/testing/
 
 @fixture(scope="module")
@@ -33,7 +32,6 @@ async def initialized_account(program: Program) -> PublicKey:
         program.program_id,
         program.provider.wallet.public_key,
         42)
-    print(f'>>> {counter_pda_account}, {program.program_id}, wallet: {program.provider.wallet.public_key}')
     await program.rpc["initialize"](
         42,
         ctx=Context(

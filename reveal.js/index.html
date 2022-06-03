@@ -44,11 +44,18 @@
 										<img src="images/chkp.jpg" style="height: 1em; border-radius: 50%; margin: 0px;">
 									</a>
 								</li>
-								<li>former Java developer</li>
+								<li>formerly Java developer</li>
 								<li>interest in distributed systems</li>
 							</ul>
 						</div>
 					</div>
+				</section>
+
+				<section data-background="images/background.png">
+					<h2>Workshop</h2>
+					<p>&nbsp;</p>
+					<p><a href="https://github.com/chainkeepers/20220605_solana_contracts">https://bit.ly/chkp-solana</a></p>
+					<p><a href="https://github.com/chainkeepers/20220605_solana_contracts">github @ chainkeepers/20220605_solana_contracts</a></p>
 				</section>
 				
 				<section data-background="images/solana-meme.png" data-background-size="70%"></section>
@@ -75,23 +82,24 @@
 						<li>serial smart contract processing</li>
 					</ul>
 				</section>
-				<section data-background="images/ethereum-txn.png" data-background-size="90%"></section>
-
-				<section data-background="images/eth-meme-fees.png" data-background-size="80%"></section>
+				<section data-background="images/ethereum-txn.png" data-background-size="85%"></section>
+		
+				<section data-background="images/background-ethereum.png">
+					<img src="images/coding-time.jpg" />
+				</section>
 
 				<section data-background="images/background-ethereum.png">
 					<h2>Ethereum smart contracts</h2>
 					<ul>
 						<li>data owned by contract<br/><span style="color: #999;">(key-value store, LevelDB in Geth)</span></li>
-						<li>difficult to upgrade the code</li>
-						<li>easy to work with</li>
+						<li>difficult to upgrade when deployed</li>
+						<li>usualy Solidity programming language</li>
+						<li>straightforward to work with</li>
 					</ul>
 					<!--https://laurentsenta.com/articles/storage-and-dapps-on-ethereum-blockchain/-->
 				</section>
-				<section data-background="images/background-ethereum.png">
-					<img src="images/coding-time.jpg" />
-				</section>
 
+				<section data-background="images/eth-meme-fees.png" data-background-size="80%"></section>
 
 				<!-- SOLANA-->
 				<section data-background="images/background-solana.png" >
@@ -118,8 +126,8 @@
 				</section>
 
 
-				<section data-background="images/solana-txn.png" data-background-size="90%"></section>
-				<section data-background="images/solana-8-inovations.png" data-background-size="90%"></section>
+				<section data-background="images/solana-txn.png" data-background-size="80%"></section>
+				<section data-background="images/solana-8-inovations.png" data-background-size="80%"></section>
 
 				<!-- SOLANA CONTRACT -->
 				<section data-background="images/background-solana.png" >
@@ -140,34 +148,104 @@
 				<section data-background="images/background-solana.png" >
 					<h2>Accounts</h2>
 					<ul>
-						<li>balance, owner, data</li>
-						<li>`rent` payment required</li>
-						<li>two types - on-curve and off-curve (PDA)</li>
-						<!--  ed25519 curve - a valid public key, off-curve “program derived address” (PDA) no corresponding private key -->
+						<li>everything is an account, everything is a program</li>
+						<li>address, balance, owner, data</li>
+						<li>rent paid for data storage</li>
+						<!--  two types on-curve - ed25519 curve - a valid public key; off-curve “program derived address” (PDA) no corresponding private key -->
 					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<pre style="width: 100%;"><code data-trim data-escape>
+						$ solana-keygen new -o /tmp/keypair.json
+						>> HDjNVY5sVjfs8vUwBBXXhMu7j72EaEFcjiJW3ozBKZds
+						$ solana transfer $(solana-keygen pubkey /tmp/keypair.json) 10
+					</code></pre>
+					<img src="images/arrow-down.png" style="margin:0px"/>
+					<div>
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-account-explorer.png" />
+						</a>
+					</div>
 				</section>
 
 				<section data-background="images/background-solana.png" >
 					<h2>Transactions</h2>
 					<ul>
 						<li>formed by instructions</li>
-						<li>price == number of signatures (<a href="https://decrypt.co/87532/ethereum-gas-fees-avalanche-solana">0.000005</a>)</li>
+						<li>price in number of signatures (<a href="https://decrypt.co/87532/ethereum-gas-fees-avalanche-solana">0.000005</a>)</li>
 						<!-- transaction fees is a proposal to come to Solana -->
-						<li>transactions size has to fit to IPv6 MTU (</li>
+						<li>transaction size to fit MTU (1232 bytes)</li> <!-- maximum transmission unit -->
 						<!-- each transaction must list all accounts that it needs to properly lock accounts for parallel execution.-->
-						<li>contains recent blockhash (valid recent 150)</li>
+						<li>contains blockhash (valid for 150 blocks)</li>
 					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<pre style="width: 110%;"><code data-trim data-escape>
+						$ solana transfer $(solana-keygen pubkey /tmp/keypair.json) 10
+						>> Signature: Ha3dQSWryhD2tXyf9VKPWNzxv3fXCB66NtjGx2hd5KegSrcx...
+					</code></pre>
+					<img src="images/arrow-down.png" style="margin:0px"/>
+					<div>
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-transaction-explorer.png" />
+						</a>
+					</div>
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<div style="margin:0px">
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-transaction-explorer2.png" />
+						</a>
+					</div>
+					<img src="images/arrow-down.png" style="margin:0px"/>
+					<div style="margin:0px">
+						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
+							<img src="images/solana-transaction-explorer3.png" />
+						</a>
+					</div>
 				</section>
 
 				<section data-background="images/background-solana.png" >
 					<h2>Runtime</h2>
 					<ul>
-						<li>limited number of computed units</li> <!-- 200.000 compute units for instruction -->
+						<li>accounts announced beforehand</li>
+						<li>computational time limited</li> <!-- 200.000 compute units per instruction -->
 					</ul>
 				</section>
 
-				<section data-background="images/background-ethereum.png">
+				<section data-background="images/background-solana.png" >
+					<img src="images/github-mango-explorer.png" />
+				</section>
+
+				<section data-background="images/background-solana.png" >
+					<h2>Solana smart contract</h2>
+					<ul>
+						<li>Rust programming language</li>
+						<li>Anchor framework</li>
+					</ul>
+				</section>
+
+				<section data-background="images/background-solana.png">
 					<img src="images/coding-time.jpg" />
+				</section>
+
+
+				<section data-background="images/background-solana.png">
+					<h2>Solana recap</h2>
+					<ul>
+						<li>blockhash to send transaction</li>
+						<li>account - balance, owner, data</li>
+						<li>Rust + Anchor</li>
+					</ul>
+				</section>
+
+				<section data-background="images/solana-end2.jpg">
+					<h2 style="text-align: right; margin-top: 8em;">
+						Q & A
+					</h2>
 				</section>
 
 				<!--https://medium.com/dragonfly-research/the-amm-test-a-no-bs-look-at-l1-performance-4c8c2129d581-->

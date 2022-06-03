@@ -95,13 +95,15 @@ This workshop will work with framework link:https://book.anchor-lang.com/[Anchor
 Solana online tool similar to Ethereum Remix can be found at
 https://beta.solpg.io
 
-=== 1) Installing Rust, Solana and Anchor
+=== 1) Installing Rust, Solana, Anchor and Python
 
 We need local instalment of Rust, Solana validator CLI and Anchor framework.
 
 * for Rust installation, see https://www.rust-lang.org/tools/install
-* for Solana CLI tools installation, see https://docs.solana.com/cli/install-solana-cli-tools
+* for Solana CLI installation, see https://docs.solana.com/cli/install-solana-cli-tools
 * for Anchor installation, see https://book.anchor-lang.com/getting_started/installation.html#anchor
+* for Python installation, see https://www.python.org/downloads/
+* for nodejs installation, see https://nodejs.org/en/download/
 
 [source,sh]
 ----
@@ -110,7 +112,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 rustup component add rustfmt
 
-# Solana CLI tools
+# Solana CLI
 sh -c "$(curl -sSfL https://release.solana.com/v1.10.20/install)"
 # -- or ---
 solana-install update
