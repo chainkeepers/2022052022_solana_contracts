@@ -5,11 +5,21 @@ This is a workshop sources on basics of Solana smart contract.
 You can browse through the content when reading this README.
 The development is tracked in following branches:
 
-* link:`slides`[tree/main] - just slides and readme
-* `ethereum` - ethereum hello world counter smart contract with use of `brownie`
-* `solana_01` - the same as _ethereum_
+* link:../../tree/slides[`slides`] - just slides and readme
+* link:../../tree/ethereum[`ethereum`] - ethereum hello world counter smart contract with use of `brownie`
+* link:../../tree/solana_01[`solana_01`] - no Solana program
+* link:../../tree/solana_02[`solana_02`] - Solana Anchor init program defined
+* link:../../tree/solana_03[`solana_03`] - Solana Anchor counter program started
+* link:../../tree/solana_04[`solana_04`] - Solana Anchor counter program finished
+* link:../../tree/main[`main`] - Solana Anchor counter program with PDA
 
 == Solidity smart contract
+
+[NOTE]
+====
+* Start here with branch link:../../tree/slides[`slides`]
+* Final state of this part is link:../../tree/ethereum[`ethereum`]
+====
 
 Working with Eth Brownie -
 _A Python-based development and testing framework for smart contracts targeting the Ethereum Virtual Machine_.
@@ -136,8 +146,8 @@ avm install latest; avm use latest
 
 [NOTE]
 ====
-* Start here with branch `solana_01`.
-* Final state of this part is `solana_02`
+* Start here with branch link:../../tree/solana_01[`solana_01`]
+* Final state of this part is link:../../tree/solana_01[`solana_02`]
 ====
 
 To create a Anchor project use `init`.
@@ -260,8 +270,8 @@ anchor test --skip-deploy --skip-local-validator --skip-build
 
 [NOTE]
 ====
-* Start here with branch `solana_03`
-* Final state of this part is `solana_04`
+* Start here with branch link:../../tree/solana_03[`solana_03`]
+* Final state of this part is link:../../tree/solana_04[`solana_04`]
 ====
 
 As we are rather a Python shop than JavaScript lovers we do use `anchorpy` from now.
@@ -334,13 +344,15 @@ solana confirm -v <transaction signature>
 
 === 6) Bonus: Program Derived Addresses
 
+NOTE: switch to branch link:../../tree/main[`main`]
+
 The calls are mostly the same but we need to calculate
 the off-curve PDA public key at client and send
 the account public key to contract that creates the PDA account.
 
 === 7) Workshop finished
 
-Continue at https://soldev.app/
+Continue with other Solana development resources at https://soldev.app/
 
 
 == Reveal.js slides dev
