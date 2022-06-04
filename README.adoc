@@ -31,27 +31,15 @@ NOTE: expecting the `nodejs`, `npm` and `python` to be installed
 
 [source,sh]
 ----
-git clone --depth 1 https://github.com/eth-brownie/brownie.git -b v1.19.0 solidity
-cd solidity
-rm -rf .git*
-python3 -m venv .venv
-./.venv/bin/activate
-pip install wheel
-pip install -e . -r requirements-dev.txt
-
-# in case of troubles in dependencies
-# and install requirements once again
-sed -i 's/certifi==2021.10.8/certifi==2022.5.18.1/' ./requirements-dev.txt
-
-
-# ----
 # brownie depends on Ganache-CLI for local development
 npm install -g ganache-cli
 
 which ganache-cli
 > ~/.nvm/versions/node/v16.13.0/bin/ganache-cli
-ganache-cli version
+ganache-cli --version
 > Ganache CLI v6.12.2 (ganache-core: 2.13.2)
+
+mkdir solidity && cd solidity
 
 # install brownie
 python3 -m venv .venv
@@ -61,10 +49,9 @@ pip install eth-brownie
 brownie --version
 > Brownie v1.19.0 - Python development framework for Ethereum
 
-# then to init the smart contract project
 # we can create an empty directory structure with `brownie init` command
-# or use prepaed template `brownie bake token`
-# but we use a simple brownie project and start work from there
+# or use prepared template `brownie bake token`
+# here we use a brownie projectfrom github
 
 # to work with logs use third-party project
 git clone https://github.com/PatrickAlphaC/brownie-events-logs --depth 1 counter
@@ -73,13 +60,13 @@ rm -rf .git*
 # to test if the brownie works
 brownie run scripts/deploy_and_store.py
 
-# -> change the contract to be in form of a counter :-)
+### -> change the contract to be in form of a counter :-)
+# check the branch `ethereum`
 
-brownie compile
 # to run the tests
 brownie test
 
-# to run the script that calls the contract
+# to run the adjusted script with counter contract
 brownie run scripts/deploy_and_store.py
 
 # to use brownie console to operate with contract
@@ -142,7 +129,7 @@ cargo install --git https://github.com/project-serum/anchor avm --locked --force
 avm install latest; avm use latest
 ----
 
-=== 2) Initialization of Anchor project
+=== 2) Start Solana validator at localhost
 
 [NOTE]
 ====
@@ -150,26 +137,28 @@ avm install latest; avm use latest
 * Final state of this part is link:../../tree/solana_01[`solana_02`]
 ====
 
-To create a Anchor project use `init`.
+First, let's start the Solana test validator on localhost.
+(Do this in a different shell.)
+
+Then starting the validator, see https://docs.solana.com/developing/test-validator
 
 [source,sh]
 ----
-anchor init anchor
-cd anchor
-# rm -rf .git
+solana-test-validator
 
-# to fetch all Rust dependencies and build the program
-anchor build
+# data structure of the test validator
+# is saved in current directory under ./test-ledger
 ----
 
-=== 3) Start Solana validator at localhost
+Now, let's configure the Solana CLI to use the local validator as the default one
 
-First we need a keypair to work with while developing.
-Solana account is defined as usual with private and public key.
-The keypair expresses the both, private and public key.
+[source,sh]
+----
+solana config set --url http://127.0.0.1:8899
+----
 
-The keypair file is an array of 64 values where
-32 bytes represents the private and 32 bytes the public key.
+Next, we need a keypair (private and public key) to work with.
+The keypair file is an array of 64 values (32 bytes for private one, 32 bytes for public one).
 The public key is displayed in form of base58 string normally.
 
 [source,sh]
@@ -177,8 +166,6 @@ The public key is displayed in form of base58 string normally.
 solana-keygen new
 # generated keypair is placed at $HOME/.config/solana/id.json
 ----
-
-NOTE: to place keypair at specific location `solana-keygen new --outfile <path>/second-key.json`
 
 To check what is the public key of the keypair
 
@@ -189,24 +176,16 @@ solana-keygen pubkey
 solana-keygen pubkey ~/.config/solana/id.json
 ----
 
-Then starting the validator, see https://docs.solana.com/developing/test-validator
-
 [source,sh]
 ----
-solana-test-validator
-# data structure of the test validator
-# is saved in current directory under ./test-ledger
-----
-
-Now, let's configure the Solana CLI to use the local validator as the default location
-
-[source,sh]
-----
-solana config set --url http://127.0.0.1:8899
-
 # now we can ask for airdrop to our dev pubkey address that CLI works with by default
 solana airdrop 10
 solana balance
+
+# we can check our default account
+solana account
+# or use the Solana Explorer
+# https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899
 
 # airdrop showed a transaction signature, we can check what was part of it
 solana confirm -v <transaction signature>
@@ -220,6 +199,19 @@ solana balance $(solana-keygen pubkey ~/.config/solana/second-keypair.json)
 solana transfer $(solana-keygen pubkey ~/.config/solana/id.json)  3 --keypair ~/.config/solana/second-keypair.json --fee-payer ~/.config/solana/id.json
 
 solana account -v $(solana-keygen pubkey ~/.config/solana/second-keypair.json)
+----
+
+=== 3) Initialization of Anchor project
+To create a Anchor project use `init` of anchor cli.
+
+[source,sh]
+----
+anchor init anchor
+cd anchor
+# rm -rf .git
+
+# to fetch all Rust dependencies and build the program
+anchor build
 ----
 
 === 4) Deploy contract and call it
@@ -251,8 +243,7 @@ This needs to be done via API.
 At start we will use the generated JavaScript and in the next
 step we will start using Python for that.
 
-The API call is part of the test at
-`tests/anchor.ts`.
+The API call is part of the test at `tests/anchor.ts`.
 
 NOTE: Be could run simply `anchor test` that will start the test validator automatically
       in background (leger at `.anchor/test-ledger/`,  logs at `.anchor/program-logs`).
@@ -291,18 +282,8 @@ pip install -r requirements.txt
 
 === 6) Writing Solana counter contract
 
-Now it's time to write the counter Solana contract
-and Python client.
-
-Let's start with the prepared contract and work
-to get running the client.
-
-[source,sh]
-----
-git checkout solana_counter
-----
-
-Now, **change the code** appropriatelly.
+Now it's time to **fix** the counter Solana contract
+and Python client appropriatelly.
 
 Deploying new version of contract
 
