@@ -1,0 +1,15 @@
+{
+  "contracts": {
+    "Counter": "018fe32df73b4c11aaf2ecb023b38d0469a13b90"
+  },
+  "tests": {
+    "tests/counter_test.py": {
+      "coverage": false,
+      "isolated": false,
+      "results": ".",
+      "sha1": "7aae9a0d7980f2928a73a1322ae62b9b6e527b96",
+      "txhash": []
+    }
+  },
+  "tx": {}
+}
