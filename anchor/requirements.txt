@@ -1,0 +1,2 @@
+solana == 0.23.1
+anchorpy == 0.9.1
