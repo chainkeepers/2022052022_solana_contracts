@@ -59,14 +59,14 @@
 				</section>
 				
 				<section data-background="images/solana-meme.png" data-background-size="70%"></section>
-				<section data-background="images/background.png"><h2>...</h2></section>
 				<section data-background="images/solana-meme-restart.jpg" data-background-size="70%"></section>
 
 
 				<!-- ETHEREUM-->
 				<section data-background="images/background.png">
 					<h2>Agenda</h2>
-					<ol>
+				<section data-background="images/background.png"><h2>...</h2></section>
+				<ol>
 						<li>Ethereum recap</li>
 						<li>Ethereum smart contract</li>
 						<li>Solana blockchain overview</li>
@@ -148,7 +148,8 @@
 				<section data-background="images/background-solana.png" >
 					<h2>Accounts</h2>
 					<ul>
-						<li>everything is an account, everything is a program</li>
+						<li>everything is an account, everything is
+							<a href="https://github.com/solana-labs/solana-program-library">a program</a></li>
 						<li>address, balance, owner, data</li>
 						<li>rent paid for data storage</li>
 						<!--  two types on-curve - ed25519 curve - a valid public key; off-curve “program derived address” (PDA) no corresponding private key -->
@@ -156,7 +157,7 @@
 				</section>
 
 				<section data-background="images/background-solana.png" >
-					<pre style="width: 100%;"><code data-trim data-escape>
+					<pre class="bash" style="width: 100%;"><code data-trim data-escape>
 						$ solana-keygen new -o /tmp/keypair.json
 						>> HDjNVY5sVjfs8vUwBBXXhMu7j72EaEFcjiJW3ozBKZds
 						$ solana transfer $(solana-keygen pubkey /tmp/keypair.json) 10
@@ -194,6 +195,19 @@
 					</div>
 				</section>
 
+				<section data-background="images/background-solana.png">
+					<h2>Recent blockhash at send</h2>
+					<pre class="python" style="width: 100%;"><code data-trim data-escape>
+					# // https://github.com/michaelhly/solana-py @ api.py
+					blockhash_resp = self.get_recent_blockhash(Finalized)
+					recent_blockhash = self.parse_recent_blockhash(blockhash_resp)
+					txn.recent_blockhash = recent_blockhash
+			
+					txn.sign(*signers)
+					txn_resp = self.send_raw_transaction(txn.serialize(), opts=opts)
+					</code></pre>
+				</section>
+
 				<section data-background="images/background-solana.png" >
 					<div style="margin:0px">
 						<a href="https://explorer.solana.com/?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899">
@@ -217,7 +231,7 @@
 				</section>
 
 				<section data-background="images/background-solana.png" >
-					<img src="images/github-mango-explorer.png" />
+					<img src="images/github-mango-explorer.png" width="85%"/>
 				</section>
 
 				<section data-background="images/background-solana.png" >
@@ -236,9 +250,9 @@
 				<section data-background="images/background-solana.png">
 					<h2>Solana recap</h2>
 					<ul>
-						<li>blockhash to send transaction</li>
-						<li>account - balance, owner, data</li>
 						<li>Rust + Anchor</li>
+						<li>account - balance, owner, data</li>
+						<li>blockhash to send transaction</li>
 					</ul>
 				</section>
 

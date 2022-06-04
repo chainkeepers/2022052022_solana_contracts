@@ -1,5 +1,14 @@
 = Solana smart contract basics
 
+This is a workshop sources on basics of Solana smart contract.
+
+You can browse through the content when reading this README.
+The development is tracked in following branches:
+
+* link:`slides`[tree/main] - just slides and readme
+* `ethereum` - ethereum hello world counter smart contract with use of `brownie`
+* `solana_01` - the same as _ethereum_
+
 == Solidity smart contract
 
 Working with Eth Brownie -
@@ -54,7 +63,8 @@ rm -rf .git*
 # to test if the brownie works
 brownie run scripts/deploy_and_store.py
 
-# change the contract as it should be
+# -> change the contract to be in form of a counter :-)
+
 brownie compile
 # to run the tests
 brownie test
@@ -124,9 +134,13 @@ avm install latest; avm use latest
 
 === 2) Initialization of Anchor project
 
-To create a Anchor project use `init`.
+[NOTE]
+====
+* Start here with branch `solana_01`.
+* Final state of this part is `solana_02`
+====
 
-NOTE: to get to the final state of this part go to branch `solana_01`.
+To create a Anchor project use `init`.
 
 [source,sh]
 ----
@@ -243,6 +257,12 @@ anchor test --skip-deploy --skip-local-validator --skip-build
 ----
 
 === 5) Using Python to run API calls
+
+[NOTE]
+====
+* Start here with branch `solana_03`
+* Final state of this part is `solana_04`
+====
 
 As we are rather a Python shop than JavaScript lovers we do use `anchorpy` from now.
 Let's delete the JavaScript dependencies in the Anchor project.

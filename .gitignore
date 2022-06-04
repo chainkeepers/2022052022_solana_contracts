@@ -6,3 +6,6 @@ cache/
 # python
 .venv
 __pycache__
+
+# solana
+test-ledger/
